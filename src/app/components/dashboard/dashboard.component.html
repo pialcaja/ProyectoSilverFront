@@ -1,0 +1,169 @@
+<h2 class="text-center my-4">Panel de Administrador</h2>
+
+<div class="d-flex bg-dark">
+    <div class="p-4 border-end d-flex flex-column" style="max-width: 200px; height: 100vh; color: white;">
+        <h3 class="mb-3">Items</h3>
+        <hr>
+        <button #btnUsuarios class="btn btn-outline-light w-70 mb-2" (click)="seccion = 'usuarios'">👤Usuarios</button>
+        <br>
+        <button class="btn btn-outline-light w-70 mb-2" (click)="seccion = 'videojuegos'">🎮Videojuegos</button>
+        <br>
+        <button class="btn btn-outline-light w-70 mb-2" (click)="seccion = 'categorias'">🏷️Categorías</button>
+        <hr>
+        <button class="btn btn-outline-danger w-70 mb-2 mt-auto" (click)="logout()">Cerrar sesión</button>
+    </div>
+    <!-- Gestión de usuarios -->
+    <div class="flex-grow-1 p-4">
+        <div *ngIf="seccion === 'usuarios'" style="color: white;">
+            <h3 class="mb-3">
+                Gestión de Usuarios
+                <span *ngIf="estadoSeleccionado === 'ACTIVO'">Activos</span>
+                <span *ngIf="estadoSeleccionado === 'INACTIVO'">Inactivos</span>
+            </h3>
+            <hr>
+            <!-- Filtros -->
+            <div class="mb-3">
+                <strong>Estado: </strong>
+                <button class="btn btn-outline-light btn-sm me-2" (click)="cambiarEstado('ACTIVO')">ACTIVO</button>|
+                <button class="btn btn-outline-light btn-sm me-2" (click)="cambiarEstado('INACTIVO')">INACTIVO</button>
+            </div>
+
+            <div *ngIf="estadoSeleccionado !== null" class="mb-3" style="color: white;">
+                <strong>Rol: </strong>
+                <button class="btn btn-outline-light btn-sm me-2" (click)="cambiarRol(null)">Todos</button>|
+                <button class="btn btn-outline-light btn-sm me-2" (click)="cambiarRol('ADMIN')">Administrador</button> |
+                <button class="btn btn-outline-light btn-sm me-2" (click)="cambiarRol('USER')">Usuario</button>
+            </div>
+
+            <!-- Mensaje del backend -->
+            <p *ngIf="mensajeBackend && usuarios.length === 0" class="text-danger">
+                {{ mensajeBackend }}
+            </p>
+
+            <!-- Tabla de usuarios -->
+            <div class="table-responsive">
+                <table *ngIf="usuarios.length > 0" class="table table-hover table-light table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Rol</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let u of usuarios; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ u.nombre }}</td>
+                            <td>{{ u.email }}</td>
+                            <td>{{ u.rol }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-dark" style="font-size: 12pt;"
+                                    (click)="actualizarUsuario(u)" title="Editar usuario">✏️</button> |
+                                <button *ngIf="u.estado === 'A'" class="btn btn-sm btn-outline-dark"
+                                    style="font-size: 12pt;" (click)="desactivarUsuario(u.id)"
+                                    title="Eliminar usuario">❌</button>
+                                <button *ngIf="u.estado === 'I'" class="btn btn-sm btn-outline-dark"
+                                    style="font-size: 12pt;" (click)="reactivarUsuario(u.id)"
+                                    title="Recuperar usuario">✅</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Videojuegos -->
+        <div *ngIf="seccion === 'videojuegos'" style="color: white;">
+            <h3>Gestión de Videojuegos</h3>
+            <p>Sección en construcción...</p>
+        </div>
+        <!-- Categorias -->
+        <div *ngIf="seccion === 'categorias'" style="color: white;">
+            <h3>Gestión de Categorías</h3>
+            <p>Sección en construcción...</p>
+        </div>
+    </div>
+</div>
+<!-- Modal Bootstrap -->
+<div #modalActualizarUsuario class="modal fade" tabindex="-1" id="modalActualizarUsuario" [attr.inert]="!usuarioSeleccionado ? true : null">
+  <div class="modal-dialog">
+    <div class="modal-content p-4">
+      <ng-container *ngIf="usuarioSeleccionado">
+        <h4>Actualizar Usuario</h4>
+        <hr>
+        <form (ngSubmit)="guardarCambios()" #form="ngForm" novalidate>
+
+          <div class="mb-3">
+            <label class="form-label">Nombre:</label>
+            <input
+              class="form-control"
+              [(ngModel)]="usuarioSeleccionado.nombre"
+              name="nombre"
+              required
+              maxlength="50"
+              #nombreModel="ngModel"
+            />
+            <div *ngIf="nombreModel.invalid && (nombreModel.dirty || nombreModel.touched)" class="text-danger small">
+              <div *ngIf="nombreModel.errors?.['required']">El nombre es obligatorio</div>
+              <div *ngIf="nombreModel.errors?.['maxlength']">El nombre no debe superar los 50 caracteres</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Email:</label>
+            <input
+              class="form-control"
+              [(ngModel)]="usuarioSeleccionado.email"
+              name="email"
+              required
+              email
+              #emailModel="ngModel"
+            />
+            <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="text-danger small">
+              <div *ngIf="emailModel.errors?.['required']">El correo es obligatorio</div>
+              <div *ngIf="emailModel.errors?.['email']">Formato de correo inválido</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Contraseña:</label>
+            <input
+              class="form-control"
+              type="password"
+              [(ngModel)]="nuevaPassword"
+              name="nuevaPassword"
+              #passwordModel="ngModel"
+              [ngModelOptions]="{ updateOn: 'blur' }"
+              placeholder="Dejar en blanco para no modificar"
+              minlength="6"
+              pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$"
+            />
+            <div *ngIf="nuevaPassword && passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)" class="text-danger small">
+              <div *ngIf="passwordModel.errors?.['minlength']">
+                La contraseña debe tener al menos 6 caracteres
+              </div>
+              <div *ngIf="passwordModel.errors?.['pattern']">
+                La contraseña debe contener al menos una mayúscula, un número y un carácter especial
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Rol:</label>
+            <select class="form-select" [(ngModel)]="usuarioSeleccionado.rol" name="rol" required>
+              <option value="ADMIN">Administrador</option>
+              <option value="USER">Usuario</option>
+            </select>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-primary me-2" type="submit" [disabled]="form.invalid || !validarPassword()">Guardar</button>
+            <button class="btn btn-secondary" type="button" (click)="cerrarModal()">Cancelar</button>
+          </div>
+
+        </form>
+      </ng-container>
+    </div>
+  </div>
+</div>
