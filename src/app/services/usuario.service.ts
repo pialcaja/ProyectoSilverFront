@@ -26,7 +26,12 @@ export class UsuarioService {
   }
 
   actualizarUsuario(usuario: any) {
-    return this.http.put(`${this.apiUrl}/actualizacion/${usuario.id}`, usuario);
+    const { id, ...dto } = usuario;
+    return this.http.put(`${this.apiUrl}/actualizacionAdmin/${id}`, dto);
+  }
+
+  actualizarUsuarioAdmin(usuario: any) {
+    return this.http.put(`${this.apiUrl}/actualizacionAdmin/${usuario.id}`, usuario);
   }
 
   desactivarUsuario(id: number): Observable<any> {

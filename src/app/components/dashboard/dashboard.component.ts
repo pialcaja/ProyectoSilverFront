@@ -4,8 +4,8 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../../services/usuario.service';
 import { FormsModule } from '@angular/forms';
-import { Validators } from '@angular/forms';
 import { Modal } from 'bootstrap';
+import { AlertaService } from '../../services/alerta.service';
 
 declare var bootstrap: any;
 
@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private usuarioService = inject(UsuarioService);
+  private alertaService = inject(AlertaService);
 
   @ViewChild('modalActualizarUsuario') modalElementRef!: ElementRef;
   modalInstance!: Modal;
@@ -44,9 +45,16 @@ export class DashboardComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
-    this.router.navigateByUrl('/login');
+    this.alertaService.mostrarConfirmacion(
+      '¿Cerrar sesión?',
+      '¿Estás seguro de que deseas cerrar sesión?',
+      () => {
+        this.authService.logout();
+        this.router.navigateByUrl('/login');
+      }
+    );
   }
+
 
   estadoSeleccionado: 'ACTIVO' | 'INACTIVO' | null = null;
   rolSeleccionado: string | null = null;
@@ -61,11 +69,10 @@ export class DashboardComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.usuarios = res.usuarios || [];
-          this.mensajeBackend = res.mensaje || null;
         },
         error: (err) => {
           this.usuarios = [];
-          this.mensajeBackend = err.error?.mensaje || 'Error al obtener usuarios.';
+          this.alertaService.mostrarMensaje('error', '¡Error!', err.error?.mensaje || 'Error al obtener usuarios');
           console.error('Error al cargar usuarios', err);
         },
       });
@@ -86,10 +93,30 @@ export class DashboardComponent implements OnInit {
   modalAbierto = false;
   usuarioSeleccionado: any = null;
   nuevaPassword: string = '';
+  modoRegistro: boolean = false;
+
+  registrarUsuario() {
+    this.usuarioSeleccionado = {
+      nombre: '',
+      email: '',
+      password: '',
+      rol: 'USER',
+      estado: 'A'
+    };
+    this.nuevaPassword = '';
+    this.modoRegistro = true;
+
+    if (!this.modalInstance) {
+      this.modalInstance = new bootstrap.Modal(this.modalElementRef.nativeElement);
+    }
+
+    this.modalInstance.show();
+  }
 
   actualizarUsuario(usuario: any) {
     this.usuarioSeleccionado = { ...usuario };
     this.nuevaPassword = '';
+    this.modoRegistro = false;
 
     if (!this.modalInstance) {
       this.modalInstance = new bootstrap.Modal(this.modalElementRef.nativeElement);
@@ -105,7 +132,6 @@ export class DashboardComponent implements OnInit {
       this.usuarioSeleccionado = null;
       this.nuevaPassword = '';
 
-      // Evita que el foco quede en elementos ocultos
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur();
       }
@@ -115,46 +141,77 @@ export class DashboardComponent implements OnInit {
   guardarCambios() {
     if (!this.usuarioSeleccionado) return;
 
-    const usuarioActualizado = {
+    const usuario = {
       ...this.usuarioSeleccionado,
       password: this.nuevaPassword || this.usuarioSeleccionado.password
     };
 
-    this.usuarioService.actualizarUsuario(usuarioActualizado).subscribe({
-      next: (res) => {
-        this.cargarUsuarios();
-        this.cerrarModal();
-        this.nuevaPassword = '';
-      },
-      error: (err) => {
-        console.error('Error al actualizar usuario', err);
-      },
-    });
+    if (this.modoRegistro) {
+      this.usuarioService.registrar(usuario).subscribe({
+        next: (res) => {
+          this.cargarUsuarios();
+          this.cerrarModal();
+          this.alertaService.mostrarMensaje('success', '¡Éxito!', res.mensaje || 'Usuario registrado correctamente');
+        },
+        error: (err) => {
+          this.alertaService.mostrarMensaje('error', '¡Error!', err.error?.mensaje || 'Error al registrar el usuario');
+        }
+      });
+    } else {
+      this.alertaService.mostrarConfirmacion(
+        '¿Confirmar actualización?',
+        '¿Deseas guardar los cambios en este usuario?',
+        () => {
+          this.usuarioService.actualizarUsuarioAdmin(usuario).subscribe({
+            next: (res: any) => {
+              this.cargarUsuarios();
+              this.cerrarModal();
+              this.nuevaPassword = '';
+              this.alertaService.mostrarMensaje('success', '¡Éxito!', res.mensaje || 'Usuario actualizado correctamente');
+            },
+            error: (err) => {
+              this.alertaService.mostrarMensaje('error', '¡Error!', err.error?.mensaje || 'Error al actualizar el usuario');
+            },
+          });
+        }
+      );
+    }
   }
 
   desactivarUsuario(id: number) {
-
-    this.usuarioService.desactivarUsuario(id).subscribe({
-      next: (res) => {
-        this.mensajeBackend = res.mensaje || 'Usuario desactivado';
-        this.cargarUsuarios();
-      },
-      error: (err) => {
-        this.mensajeBackend = err.error?.mensaje || 'Error al desactivar usuario.';
+    this.alertaService.mostrarConfirmacion(
+      '¿Eliminar usuario?',
+      'El usuario no podrá iniciar sesión hasta ser recuperado.',
+      () => {
+        this.usuarioService.desactivarUsuario(id).subscribe({
+          next: (res) => {
+            this.alertaService.mostrarMensaje('success', '¡Éxito!', res.mensaje || 'Usuario eliminado correctamente');
+            this.cargarUsuarios();
+          },
+          error: (err) => {
+            this.alertaService.mostrarMensaje('error', '¡Error!', err.error?.mensaje || 'Error al eliminar el usuario');
+          }
+        });
       }
-    });
+    );
   }
 
   reactivarUsuario(id: number) {
-    this.usuarioService.reactivarUsuario(id).subscribe({
-      next: (res) => {
-        this.mensajeBackend = res.mensaje || 'Usuario activado correctamente';
-        this.cargarUsuarios();
-      },
-      error: (err) => {
-        this.mensajeBackend = err.error?.mensaje || 'Error al activar usuario.';
+    this.alertaService.mostrarConfirmacion(
+      '¿Recuperar usuario?',
+      'El usuario podrá iniciar sesión nuevamente.',
+      () => {
+        this.usuarioService.reactivarUsuario(id).subscribe({
+          next: (res) => {
+            this.alertaService.mostrarMensaje('success', '¡Éxito!', res.mensaje || 'Usuario recuperado correctamente');
+            this.cargarUsuarios();
+          },
+          error: (err) => {
+            this.alertaService.mostrarMensaje('error', '¡Éxito!', err.error?.mensaje || 'Error al recuperar el usuario');
+          }
+        });
       }
-    });
+    );
   }
 
   passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;

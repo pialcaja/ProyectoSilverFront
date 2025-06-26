@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { jwtDecode } from 'jwt-decode';
+import { AlertaService } from '../../services/alerta.service';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,7 @@ export class LoginComponent {
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  private alertaService = inject(AlertaService);
 
   login() {
     this.authService.login({ email: this.email, password: this.password }).subscribe({
@@ -35,8 +37,9 @@ export class LoginComponent {
           this.router.navigateByUrl('/');
         }
       },
-      error: () => {
-        this.error = 'Credenciales incorrectas';
+      error: (err) => {
+        const mensaje = err.error?.mensaje || 'Credenciales incorrectas o error desconocido';
+        this.alertaService.mostrarMensaje('error', 'Error de inicio de sesión', mensaje);
       }
     });
   }

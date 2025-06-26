@@ -14,3 +14,12 @@ form {
   width: 100%;
   max-width: 400px;
 }
+
+.swal2-icon.swal2-warning {
+  border-color: #ffc107 !important;
+  color: #ffc107 !important;
+}
+
+.swal2-icon.swal2-warning .swal2-icon-content {
+  color: #ffc107 !important;
+}

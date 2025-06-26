@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../../services/usuario.service';
+import { AlertaService } from '../../services/alerta.service';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +20,7 @@ export class RegistroComponent {
 
   private usuarioService = inject(UsuarioService);
   private router = inject(Router);
+  private alertaService = inject(AlertaService);
 
   register() {
     const nuevoUsuario = {
@@ -29,11 +31,12 @@ export class RegistroComponent {
 
     this.usuarioService.registrar(nuevoUsuario).subscribe({
       next: () => {
-        this.success = 'Registro exitoso. Ahora puedes iniciar sesión.';
+        this.alertaService.mostrarMensaje('success', '¡Registrado!', 'Registro exitoso. Ahora puedes iniciar sesión');
         setTimeout(() => this.router.navigateByUrl('/login'), 2000);
       },
       error: (err) => {
-        this.error = err.error?.mensaje || 'Error al registrar usuario.';
+        const mensaje = err.error?.mensaje || 'Error al registrar usuario';
+        this.alertaService.mostrarMensaje('error', 'Error de registro', mensaje);
       }
     });
   }
