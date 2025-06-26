@@ -9,7 +9,8 @@ import { AlertaService } from '../../services/alerta.service';
   selector: 'app-register',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './registro.component.html'
+  templateUrl: './registro.component.html',
+  styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent {
   nombre = '';

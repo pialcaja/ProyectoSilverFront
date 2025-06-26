@@ -1,51 +1,57 @@
-<div class="centrado-pagina">
-  <h2>Registrarse</h2>
-
-  <form #form="ngForm" (ngSubmit)="register()" novalidate>
-    <div class="mb-3">
-      <label class="form-label">Nombre:</label>
-      <input class="form-control" [(ngModel)]="nombre" name="nombre" required maxlength="50" #nombreModel="ngModel" />
-      <div *ngIf="nombreModel.invalid && (nombreModel.dirty || nombreModel.touched)" class="text-danger small">
-        <div *ngIf="nombreModel.errors?.['required']">El nombre es obligatorio</div>
-        <div *ngIf="nombreModel.errors?.['maxlength']">El nombre no debe superar los 50 caracteres</div>
-      </div>
+<div class="login-page">
+  <div class="login-container">
+    <!-- Izquierda: Imagen -->
+    <div class="login-image">
+      <img src="img/login/login_imagen_izq.jpg" alt="Mudkip" />
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Email:</label>
-      <input class="form-control" [(ngModel)]="email" name="email" required email #emailModel="ngModel" />
-      <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="text-danger small">
-        <div *ngIf="emailModel.errors?.['required']">El correo es obligatorio</div>
-        <div *ngIf="emailModel.errors?.['email']">Formato de correo inválido</div>
-      </div>
+    <!-- Derecha: Formulario de registro -->
+    <div class="login-form">
+      <img src="img/logo.png" alt="Logo" class="logo" />
+      <h2>Crear Cuenta</h2>
+
+      <form #form="ngForm" (ngSubmit)="register()" novalidate>
+        <label>Nombre *</label>
+        <input type="text" [(ngModel)]="nombre" name="nombre" required maxlength="50" #nombreModel="ngModel" />
+        <div *ngIf="nombreModel.invalid && (nombreModel.dirty || nombreModel.touched)" class="error">
+          <div *ngIf="nombreModel.errors?.['required']">El nombre es obligatorio</div>
+          <div *ngIf="nombreModel.errors?.['maxlength']">El nombre no debe superar los 50 caracteres</div>
+        </div>
+
+        <label>Correo electrónico *</label>
+        <input type="email" [(ngModel)]="email" name="email" required email #emailModel="ngModel" />
+        <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="error">
+          <div *ngIf="emailModel.errors?.['required']">El correo es obligatorio</div>
+          <div *ngIf="emailModel.errors?.['email']">Formato de correo inválido</div>
+        </div>
+
+        <label>Contraseña *</label>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+          minlength="6"
+          pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$"
+          #passwordModel="ngModel"
+        />
+        <div *ngIf="passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)" class="error">
+          <div *ngIf="passwordModel.errors?.['required']">La contraseña es obligatoria</div>
+          <div *ngIf="passwordModel.errors?.['minlength']">Mínimo 6 caracteres</div>
+          <div *ngIf="passwordModel.errors?.['pattern']">
+            Debe contener al menos una mayúscula, un número y un carácter especial
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="form.invalid">Crear cuenta</button>
+
+        <p *ngIf="error" class="error-message">{{ error }}</p>
+        <p *ngIf="success" style="color: green">{{ success }}</p>
+      </form>
+
+      <p class="register-text">
+        ¿Ya tienes cuenta? <a (click)="irAlLogin()">Iniciar Sesión</a>
+      </p>
     </div>
-
-    <div class="mb-3">
-      <label class="form-label">Contraseña:</label>
-      <input class="form-control" type="password" [(ngModel)]="password" name="password" #passwordModel="ngModel"
-        minlength="6" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$" required />
-      <div *ngIf="passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)" class="text-danger small">
-        <div *ngIf="passwordModel.errors?.['required']">
-          La contraseña es obligatoria
-        </div>
-        <div *ngIf="passwordModel.errors?.['minlength']">
-          La contraseña debe tener al menos 6 caracteres
-        </div>
-        <div *ngIf="passwordModel.errors?.['pattern']">
-          La contraseña debe contener al menos una mayúscula, un número y un carácter especial
-        </div>
-      </div>
-    </div>
-
-    <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Crear cuenta</button>
-  </form>
-
-  <p *ngIf="error" style="color: red">{{ error }}</p>
-  <p *ngIf="success" style="color: green">{{ success }}</p>
-
-  <hr />
-
-  <p>¿Ya tienes cuenta?</p>
-  <button class="btn btn-secondary" (click)="irAlLogin()">Volver al login</button>
-
+  </div>
 </div>
