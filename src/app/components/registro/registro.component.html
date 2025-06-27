@@ -11,47 +11,66 @@
       <h2>Crear Cuenta</h2>
 
       <form #form="ngForm" (ngSubmit)="register()" novalidate>
-        <label>Nombre *</label>
-        <input type="text" [(ngModel)]="nombre" name="nombre" required maxlength="50" #nombreModel="ngModel" />
-        <div *ngIf="nombreModel.invalid && (nombreModel.dirty || nombreModel.touched)" class="error">
-          <div *ngIf="nombreModel.errors?.['required']">El nombre es obligatorio</div>
-          <div *ngIf="nombreModel.errors?.['maxlength']">El nombre no debe superar los 50 caracteres</div>
-        </div>
 
-        <label>Correo electrónico *</label>
-        <input type="email" [(ngModel)]="email" name="email" required email #emailModel="ngModel" />
-        <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="error">
-          <div *ngIf="emailModel.errors?.['required']">El correo es obligatorio</div>
-          <div *ngIf="emailModel.errors?.['email']">Formato de correo inválido</div>
-        </div>
-
-        <label>Contraseña *</label>
-        <input
-          type="password"
-          [(ngModel)]="password"
-          name="password"
-          required
-          minlength="6"
-          pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$"
-          #passwordModel="ngModel"
-        />
-        <div *ngIf="passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)" class="error">
-          <div *ngIf="passwordModel.errors?.['required']">La contraseña es obligatoria</div>
-          <div *ngIf="passwordModel.errors?.['minlength']">Mínimo 6 caracteres</div>
-          <div *ngIf="passwordModel.errors?.['pattern']">
-            Debe contener al menos una mayúscula, un número y un carácter especial
+        <!-- Nombre -->
+        <div class="mb-3">
+          <label for="nombre">Nombre *</label>
+          <input type="text" id="nombre" name="nombre" class="form-control" [(ngModel)]="nombre" required maxlength="50"
+            #nombreModel="ngModel" [ngClass]="{
+          'is-invalid': nombreModel.invalid && (nombreModel.dirty || nombreModel.touched),
+          'is-valid': nombreModel.valid && (nombreModel.dirty || nombreModel.touched)
+        }" />
+          <div *ngIf="nombreModel.invalid && (nombreModel.dirty || nombreModel.touched)" class="invalid-feedback">
+            <div *ngIf="nombreModel.errors?.['required']">El nombre es obligatorio</div>
+            <div *ngIf="nombreModel.errors?.['maxlength']">El nombre no debe superar los 50 caracteres</div>
           </div>
         </div>
 
-        <button type="submit" [disabled]="form.invalid">Crear cuenta</button>
+        <!-- Correo electrónico -->
+        <div class="mb-3">
+          <label for="email">Correo electrónico *</label>
+          <input type="email" id="email" name="email" class="form-control" [(ngModel)]="email" required email
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" #emailModel="ngModel" [ngClass]="{
+          'is-invalid': emailModel.invalid && (emailModel.dirty || emailModel.touched),
+          'is-valid': emailModel.valid && (emailModel.dirty || emailModel.touched)
+        }" />
+          <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="invalid-feedback">
+            <div *ngIf="emailModel.errors?.['required']">El correo es obligatorio</div>
+            <div *ngIf="emailModel.errors?.['email']">Formato de correo inválido</div>
+            <div *ngIf="emailModel.errors?.['pattern']">El correo no cumple con el formato requerido</div>
+          </div>
+        </div>
 
-        <p *ngIf="error" class="error-message">{{ error }}</p>
+        <!-- Contraseña -->
+        <div class="mb-3">
+          <label for="password">Contraseña *</label>
+          <input type="password" id="password" name="password" class="form-control" [(ngModel)]="password" required
+            minlength="6" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$" #passwordModel="ngModel"
+            [ngClass]="{
+          'is-invalid': passwordModel.invalid && (passwordModel.dirty || passwordModel.touched),
+          'is-valid': passwordModel.valid && (passwordModel.dirty || passwordModel.touched)
+        }" />
+          <div *ngIf="passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)" class="invalid-feedback">
+            <div *ngIf="passwordModel.errors?.['required']">La contraseña es obligatoria</div>
+            <div *ngIf="passwordModel.errors?.['minlength']">Mínimo 6 caracteres</div>
+            <div *ngIf="passwordModel.errors?.['pattern']">
+              Debe contener al menos una mayúscula, un número y un carácter especial
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón -->
+        <button type="submit" class="btn btn-dark w-100" [disabled]="form.invalid">Crear cuenta</button>
+
+        <!-- Mensajes -->
+        <p *ngIf="error" class="error-message text-danger mt-2">{{ error }}</p>
         <p *ngIf="success" style="color: green">{{ success }}</p>
       </form>
 
-      <p class="register-text">
-        ¿Ya tienes cuenta? <a (click)="irAlLogin()">Iniciar Sesión</a>
+      <p class="register-text mt-3">
+        ¿Ya tienes cuenta? <a (click)="irAlLogin()" style="cursor: pointer;">Iniciar Sesión</a>
       </p>
     </div>
+
   </div>
 </div>

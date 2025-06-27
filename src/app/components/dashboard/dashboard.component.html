@@ -36,28 +36,28 @@
 
         <div>
           <strong>Estado: </strong>
-          <button class="btn btn-outline-light btn-sm" 
-                  [ngClass]="estadoSeleccionado === 'ACTIVO' ? 'btn-light text-dark' : 'btn-outline-light'" 
-                  (click)="cambiarEstado('ACTIVO')">Activo</button>
+          <button class="btn btn-outline-light btn-sm"
+            [ngClass]="estadoSeleccionado === 'ACTIVO' ? 'btn-light text-dark' : 'btn-outline-light'"
+            (click)="cambiarEstado('ACTIVO')">Activo</button>
           <span class="mx-1">|</span>
-          <button class="btn btn-outline-light btn-sm" 
-                  [ngClass]="estadoSeleccionado === 'INACTIVO' ? 'btn-light text-dark' : 'btn-outline-light'" 
-                  (click)="cambiarEstado('INACTIVO')">Inactivo</button>
+          <button class="btn btn-outline-light btn-sm"
+            [ngClass]="estadoSeleccionado === 'INACTIVO' ? 'btn-light text-dark' : 'btn-outline-light'"
+            (click)="cambiarEstado('INACTIVO')">Inactivo</button>
         </div>
 
         <div>
           <strong>Rol: </strong>
-          <button class="btn btn-outline-light btn-sm" 
-                  [ngClass]="rolSeleccionado === null ? 'btn-light text-dark' : 'btn-outline-light'" 
-                  (click)="cambiarRol(null)">Todos</button>
+          <button class="btn btn-outline-light btn-sm"
+            [ngClass]="rolSeleccionado === null ? 'btn-light text-dark' : 'btn-outline-light'"
+            (click)="cambiarRol(null)">Todos</button>
           <span class="mx-1">|</span>
-          <button class="btn btn-outline-light btn-sm" 
-                  [ngClass]="rolSeleccionado === 'ADMIN' ? 'btn-light text-dark' : 'btn-outline-light'" 
-                  (click)="cambiarRol('ADMIN')">Administrador</button>
+          <button class="btn btn-outline-light btn-sm"
+            [ngClass]="rolSeleccionado === 'ADMIN' ? 'btn-light text-dark' : 'btn-outline-light'"
+            (click)="cambiarRol('ADMIN')">Administrador</button>
           <span class="mx-1">|</span>
-          <button class="btn btn-outline-light btn-sm" 
-                  [ngClass]="rolSeleccionado === 'USER' ? 'btn-light text-dark' : 'btn-outline-light'" 
-                  (click)="cambiarRol('USER')">Cliente</button>
+          <button class="btn btn-outline-light btn-sm"
+            [ngClass]="rolSeleccionado === 'USER' ? 'btn-light text-dark' : 'btn-outline-light'"
+            (click)="cambiarRol('USER')">Cliente</button>
         </div>
 
         <!-- Tabla de usuarios -->

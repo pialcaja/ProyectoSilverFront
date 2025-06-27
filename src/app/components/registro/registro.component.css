@@ -1,3 +1,8 @@
+.login-form h2 {
+    font-family: "Keania One", sans-serif;
+    font-size: 30pt;
+}
+
 .login-page {
     background-image: url('/img/login/login_fondo.jpeg');
     background-size: cover;
@@ -41,11 +46,6 @@
     flex-direction: column;
     justify-content: flex-start;
     overflow-y: scroll;
-    scrollbar-width: none;
-}
-
-.login-form::-webkit-scrollbar {
-  display: none;
 }
 
 .logo {

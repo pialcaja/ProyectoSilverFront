@@ -11,26 +11,48 @@
       <h2>Iniciar Sesión</h2>
 
       <form (ngSubmit)="login()" #form="ngForm" novalidate>
-        <label>Correo electrónico *</label>
-        <input type="email" [(ngModel)]="email" name="email" required email #emailModel="ngModel" />
-        <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="error">
-          <div *ngIf="emailModel.errors?.['required']">El correo es obligatorio</div>
-          <div *ngIf="emailModel.errors?.['email']">Formato de correo inválido</div>
+        <!-- Correo -->
+        <div class="mb-3">
+          <label for="email"><strong>Correo electrónico</strong></label>
+          <input type="email" id="email" name="email" class="form-control" [(ngModel)]="email" required email
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" #emailModel="ngModel" [ngClass]="{
+          'is-invalid': emailModel.invalid && (emailModel.dirty || emailModel.touched),
+          'is-valid': emailModel.valid && (emailModel.dirty || emailModel.touched)
+        }" />
+          <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="invalid-feedback">
+            <div *ngIf="emailModel.errors?.['required']">El correo es obligatorio</div>
+            <div *ngIf="emailModel.errors?.['email']">Formato de correo inválido</div>
+            <div *ngIf="emailModel.errors?.['pattern']">El correo no cumple con el formato requerido</div>
+          </div>
         </div>
 
-        <label>Contraseña *</label>
-        <input type="password" [(ngModel)]="password" name="password" required #passwordModel="ngModel" />
-        <div *ngIf="passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)" class="error">
-          <div *ngIf="passwordModel.errors?.['required']">La contraseña es obligatoria</div>
+        <!-- Contraseña -->
+        <div class="mb-3">
+          <label for="password"><strong>Contraseña</strong></label>
+          <input type="password" id="password" name="password" class="form-control" [(ngModel)]="password" required
+            #passwordModel="ngModel" [ngClass]="{
+          'is-invalid': passwordModel.invalid && (passwordModel.dirty || passwordModel.touched),
+          'is-valid': passwordModel.valid && (passwordModel.dirty || passwordModel.touched)
+        }" />
+          <div *ngIf="passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)" class="invalid-feedback">
+            <div *ngIf="passwordModel.errors?.['required']">La contraseña es obligatoria</div>
+          </div>
         </div>
 
-        <button type="submit" [disabled]="form.invalid">Entrar</button>
-        <p *ngIf="error" class="error-message">{{ error }}</p>
+        <!-- Botón -->
+        <button type="submit" class="btn btn-dark w-100" [disabled]="form.invalid">
+          Entrar
+        </button>
+
+        <!-- Error del login -->
+        <p *ngIf="error" class="error-message text-danger mt-2">{{ error }}</p>
       </form>
 
-      <p class="register-text">
-        ¿No tienes cuenta? <a (click)="irAlRegistro()">Regístrate</a>
+      <p class="register-text mt-3">
+        ¿No tienes cuenta?
+        <a (click)="irAlRegistro()" style="cursor: pointer;">Regístrate</a>
       </p>
     </div>
+
   </div>
 </div>
