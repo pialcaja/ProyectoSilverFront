@@ -14,12 +14,19 @@ export class UsuarioService {
     return this.http.post(`${this.apiUrl}/registro`, usuario);
   }
 
-  listarUsuarios(estado: 'ACTIVO' | 'INACTIVO', rol?: string): Observable<any> {
+  listarUsuarios(
+    estado: 'ACTIVO' | 'INACTIVO',
+    rol?: string,
+    page: number = 0,
+    size: number = 5,
+    textoBusqueda: string = ''
+  ): Observable<any> {
     const estadoBackend = estado === 'ACTIVO' ? 'A' : 'I';
 
-    let params: any = { estado: estadoBackend };
-    if (rol) {
-      params.rol = rol;
+    let params: any = { estado: estadoBackend, page, size };
+    if (rol) params.rol = rol;
+    if (textoBusqueda && textoBusqueda.trim() !== '') {
+      params.textoBusqueda = textoBusqueda;
     }
 
     return this.http.get(`${this.apiUrl}/listado`, { params });

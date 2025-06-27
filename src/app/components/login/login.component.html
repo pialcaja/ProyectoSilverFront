@@ -13,16 +13,15 @@
       <form (ngSubmit)="login()" #form="ngForm" novalidate>
         <!-- Correo -->
         <div class="mb-3">
-          <label for="email"><strong>Correo electrónico</strong></label>
-          <input type="email" id="email" name="email" class="form-control" [(ngModel)]="email" required email
-            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" #emailModel="ngModel" [ngClass]="{
+          <label for="email"><strong>Email</strong></label>
+          <input type="email" id="email" name="email" class="form-control" autocomplete="off" [(ngModel)]="email" required
+            pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" #emailModel="ngModel" [ngClass]="{
           'is-invalid': emailModel.invalid && (emailModel.dirty || emailModel.touched),
           'is-valid': emailModel.valid && (emailModel.dirty || emailModel.touched)
         }" />
           <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="invalid-feedback">
-            <div *ngIf="emailModel.errors?.['required']">El correo es obligatorio</div>
-            <div *ngIf="emailModel.errors?.['email']">Formato de correo inválido</div>
-            <div *ngIf="emailModel.errors?.['pattern']">El correo no cumple con el formato requerido</div>
+            <div *ngIf="emailModel.errors?.['required']">El email es obligatorio</div>
+            <div *ngIf="emailModel.errors?.['pattern']">Formato de email inválido</div>
           </div>
         </div>
 

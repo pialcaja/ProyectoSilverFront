@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 
@@ -19,6 +19,8 @@ export class AuthService {
   private refreshTimer?: ReturnType<typeof setTimeout>;
 
   constructor(private http: HttpClient) { }
+
+  loggedIn$ = new BehaviorSubject<boolean>(this.isLoggedIn());
 
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post(this.loginUrl, credentials).pipe(
@@ -51,6 +53,26 @@ export class AuthService {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     this.scheduleRefresh(accessToken);
+    this.loggedIn$.next(true);
+  }
+
+  getNombreUsuario(): string | null {
+    const token = this.getAccessToken();
+    console.log('SE HA CAPTURADO EL TOKEN: ' + token);
+
+    if (!token) {
+      console.log('TOKEN CAPTURADO ES NULL');
+      return null;
+    }
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('NOMBRE EN EL TOKEN: ' + payload.nombre);
+      return payload.nombre || null;
+    } catch (e) {
+      console.log('ERROR AL DECODIFICAR EL TOKEN', e);
+      return null;
+    }
   }
 
   logout() {
@@ -70,7 +92,7 @@ export class AuthService {
       const decoded: JwtPayload = jwtDecode(token);
       const expiresAt = decoded.exp * 1000;
       const now = Date.now();
-      const refreshIn = expiresAt - now - 30000; // 30s antes
+      const refreshIn = expiresAt - now - 30000;
 
       if (this.refreshTimer) clearTimeout(this.refreshTimer);
       if (refreshIn > 0) {
@@ -80,6 +102,18 @@ export class AuthService {
       }
     } catch {
       this.logout();
+    }
+  }
+
+  isLoggedIn(): boolean {
+    const token = this.getAccessToken();
+    if (!token) return false;
+
+    try {
+      const decoded: JwtPayload = jwtDecode(token);
+      return decoded.exp * 1000 > Date.now();
+    } catch {
+      return false;
     }
   }
 }

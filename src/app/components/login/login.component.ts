@@ -27,6 +27,8 @@ export class LoginComponent {
       next: (res: any) => {
         this.authService.saveTokens(res.accessToken, res.refreshToken);
 
+        this.authService.initTokenMonitoring();
+
         const decodedToken: any = jwtDecode(res.accessToken);
         const roles: string[] = decodedToken.roles || [];
 

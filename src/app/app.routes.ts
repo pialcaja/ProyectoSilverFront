@@ -3,11 +3,13 @@ import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RegistroComponent } from './components/registro/registro.component';
 import { InicioComponent } from './components/inicio/inicio.component';
+import { NoAdminGuard } from './guards/no-admin.guard';
+import { NoUserGuard } from './guards/no-user.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'inicio', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistroComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'inicio', component: InicioComponent }
+  { path: 'dashboard', component: DashboardComponent, canActivate: [NoUserGuard] },
+  { path: 'inicio', component: InicioComponent, canActivate: [NoAdminGuard] }
 ];

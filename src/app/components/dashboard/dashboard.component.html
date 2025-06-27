@@ -1,5 +1,6 @@
-<h2 class="text-center my-4">Panel de Administrador</h2>
-
+<h2 class="text-center my-4" *ngIf="nombreUsuario">
+  Hola {{ nombreUsuario || 'Usuario' }}!👋 Bienvenido(a) al panel de administrador ✍️🥸
+</h2>
 <div class="d-flex bg-dark">
   <div class="p-4 border-end d-flex flex-column" style="max-width: 200px; height: 100vh; color: white;">
     <h3 class="mb-3">Items</h3>
@@ -35,6 +36,12 @@
       <div class="d-flex align-items-center flex-wrap gap-4 mb-3">
 
         <div>
+          <strong>Buscar: </strong>
+          <input type="text" [(ngModel)]="textoBusqueda" (ngModelChange)="onBuscarCambio()"
+            class="form-control form-control-sm d-inline-block" placeholder="Nombre o Email" style="width: 200px;" />
+        </div>
+
+        <div>
           <strong>Estado: </strong>
           <button class="btn btn-outline-light btn-sm"
             [ngClass]="estadoSeleccionado === 'ACTIVO' ? 'btn-light text-dark' : 'btn-outline-light'"
@@ -59,39 +66,58 @@
             [ngClass]="rolSeleccionado === 'USER' ? 'btn-light text-dark' : 'btn-outline-light'"
             (click)="cambiarRol('USER')">Cliente</button>
         </div>
-
         <!-- Tabla de usuarios -->
-        <div class="table">
-          <table *ngIf="usuarios.length > 0" class="table table-hover table-light table-bordered">
-            <thead>
+        <div class="table rounded-3 overflow-hidden mb-0">
+          <table *ngIf="usuarios.length > 0" class="table table-hover table-bordered m-0">
+            <thead style="--bs-table-bg: #0dcaf0;">
               <tr>
-                <th scope="col">#</th>
+                <th scope="col" class="text-center">#</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Email</th>
                 <th scope="col">Rol</th>
-                <th scope="col">Acciones</th>
+                <th scope="col" class="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let u of usuarios; let i = index">
-                <td>{{ i + 1 }}</td>
+              <tr *ngFor="let u of usuarios; let i = index" class="align-middle">
+                <td class="text-center">{{ i + 1 + paginaActual * tamanoPagina }}</td>
                 <td>{{ u.nombre }}</td>
                 <td>{{ u.email }}</td>
                 <td>{{ u.rol === 'ADMIN' ? 'Administrador' : u.rol === 'USER' ? 'Cliente' : u.rol }}</td>
-                <td>
+                <td class="text-center">
                   <ng-container *ngIf="u.id !== 1">
                     <button class="btn btn-sm btn-outline-dark" style="font-size: 12pt;" (click)="actualizarUsuario(u)"
-                      title="Editar usuario">✏️</button> |
+                      title="Editar Usuario">✏️</button> |
                     <button *ngIf="u.estado === 'A'" class="btn btn-sm btn-outline-dark" style="font-size: 12pt;"
-                      (click)="desactivarUsuario(u.id)" title="Eliminar usuario">❌</button>
+                      (click)="desactivarUsuario(u.id)" title="Eliminar Usuario">❌</button>
                     <button *ngIf="u.estado === 'I'" class="btn btn-sm btn-outline-dark" style="font-size: 12pt;"
-                      (click)="reactivarUsuario(u.id)" title="Recuperar usuario">✅</button>
+                      (click)="reactivarUsuario(u.id)" title="Recuperar Usuario">✅</button>
                   </ng-container>
                   <span *ngIf="u.id === 1" class="text-muted">-</span>
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="d-flex justify-content-between align-items-center w-100">
+          <!-- Total de usuarios encontrados -->
+          <div class="text-white">
+            <strong><em>Usuarios encontrados: {{ totalUsuarios }}</em></strong>
+          </div>
+
+          <!-- Navegación -->
+          <nav aria-label="Paginación de usuarios">
+            <ul class="pagination my-0">
+              <li class="page-item" [class.disabled]="paginaActual === 0">
+                <button class="page-link" style="font-size: 16pt;" (click)="irAPagina(paginaActual - 1)"
+                  [disabled]="paginaActual === 0" title="Anterior página">⬅️</button>
+              </li>
+              <li class="page-item" [class.disabled]="paginaActual >= totalPaginas - 1">
+                <button class="page-link" style="font-size: 16pt;" (click)="irAPagina(paginaActual + 1)"
+                  [disabled]="paginaActual >= totalPaginas - 1" title="Siguiente página">➡️</button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
@@ -106,79 +132,85 @@
       <p>Sección en construcción...</p>
     </div>
   </div>
-  <!-- Modal Bootstrap -->
-  <div #modalActualizarUsuario class="modal fade" tabindex="-1" id="modalActualizarUsuario"
-    [attr.inert]="!usuarioSeleccionado ? true : null">
-    <div class="modal-dialog">
-      <div class="modal-content p-5 bg-dark" style="color: white;">
-        <ng-container *ngIf="usuarioSeleccionado">
-          <div class="d-flex justify-content-between align-items-center ">
-            <h4>{{ modoRegistro ? 'Registrar Usuario' : 'Actualizar Usuario' }}</h4>
-            <button class="btn btn-light d-flex align-items-center justify-content-center" type="button"
-              style="width: 40px; height: 40px; font-size: 15pt; border-radius: 50%;" (click)="cerrarModal()">
-              <span style="position: relative;">❌​</span>
-            </button>
+</div>
+<!-- Modal Bootstrap -->
+<div #modalActualizarUsuario class="modal fade" tabindex="-1" id="modalActualizarUsuario"
+  [attr.inert]="!usuarioSeleccionado ? true : null">
+  <div class="modal-dialog">
+    <div class="modal-content p-5 bg-dark" style="color: white;">
+      <ng-container *ngIf="usuarioSeleccionado">
+        <div class="d-flex justify-content-between align-items-center ">
+          <h4>{{ modoRegistro ? 'Registrar Usuario' : 'Actualizar Usuario' }}</h4>
+          <button class="btn btn-light d-flex align-items-center justify-content-center" type="button"
+            style="width: 40px; height: 40px; font-size: 15pt; border-radius: 50%;" (click)="cerrarModal()">
+            <span style="position: relative;">❌​</span>
+          </button>
+        </div>
+        <hr>
+        <form (ngSubmit)="guardarCambios()" #form="ngForm" novalidate>
+
+          <!-- Nombre -->
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input class="form-control" [(ngModel)]="usuarioSeleccionado.nombre" name="nombre" required maxlength="50"
+              #nombreModel="ngModel" [ngClass]="{
+             'is-invalid': nombreModel.invalid && (nombreModel.dirty || nombreModel.touched),
+             'is-valid': nombreModel.valid && (nombreModel.dirty || nombreModel.touched)
+           }" />
+            <div *ngIf="nombreModel.invalid && (nombreModel.dirty || nombreModel.touched)" class="invalid-feedback">
+              <div *ngIf="nombreModel.errors?.['required']">El nombre es obligatorio</div>
+              <div *ngIf="nombreModel.errors?.['maxlength']">El nombre no debe superar los 50 caracteres</div>
+            </div>
           </div>
-          <hr>
-          <form (ngSubmit)="guardarCambios()" #form="ngForm" novalidate>
 
-            <div class="mb-3">
-              <label class="form-label">Nombre:</label>
-              <input class="form-control" [(ngModel)]="usuarioSeleccionado.nombre" name="nombre" required maxlength="50"
-                #nombreModel="ngModel" />
-              <div *ngIf="nombreModel.invalid && (nombreModel.dirty || nombreModel.touched)" class="text-danger small">
-                <div *ngIf="nombreModel.errors?.['required']">El nombre es obligatorio</div>
-                <div *ngIf="nombreModel.errors?.['maxlength']">El nombre no debe superar los 50 caracteres</div>
+          <!-- Email -->
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" [(ngModel)]="usuarioSeleccionado.email" name="email" required email
+              pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" #emailModel="ngModel" [ngClass]="{
+             'is-invalid': emailModel.invalid && (emailModel.dirty || emailModel.touched),
+             'is-valid': emailModel.valid && (emailModel.dirty || emailModel.touched)
+           }" />
+            <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="invalid-feedback">
+              <div *ngIf="emailModel.errors?.['required']">El email es obligatorio</div>
+              <div *ngIf="emailModel.errors?.['pattern']">Formato de email inválido</div>
+            </div>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input class="form-control" type="password" [(ngModel)]="nuevaPassword" name="nuevaPassword"
+              #passwordModel="ngModel" [ngModelOptions]="{ updateOn: 'blur' }"
+              [placeholder]="!modoRegistro ? 'Dejar en blanco para no modificar' : ''" [required]="modoRegistro"
+              pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$" [ngClass]="{
+             'is-invalid': passwordModel.invalid && (passwordModel.dirty || passwordModel.touched),
+             'is-valid': passwordModel.valid && (passwordModel.dirty || passwordModel.touched)
+           }" />
+            <div *ngIf="passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)"
+              class="invalid-feedback">
+              <div *ngIf="passwordModel.errors?.['required']">La contraseña es obligatoria</div>
+              <div *ngIf="passwordModel.errors?.['pattern']">Debe tener una mayúscula, número y carácter especial
               </div>
             </div>
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label">Email:</label>
-              <input class="form-control" [(ngModel)]="usuarioSeleccionado.email" name="email" required email
-                #emailModel="ngModel" />
-              <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="text-danger small">
-                <div *ngIf="emailModel.errors?.['required']">El correo es obligatorio</div>
-                <div *ngIf="emailModel.errors?.['email']">Formato de correo inválido</div>
-              </div>
-            </div>
+          <div class="mb-3" *ngIf="!modoRegistro">
+            <label class="form-label">Rol:</label>
+            <select class="form-select" [(ngModel)]="usuarioSeleccionado.rol" name="rol" required>
+              <option value="ADMIN">Administrador</option>
+              <option value="USER">Cliente</option>
+            </select>
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label">Contraseña:</label>
-              <input class="form-control" type="password" [(ngModel)]="nuevaPassword" name="nuevaPassword"
-                #passwordModel="ngModel" [ngModelOptions]="{ updateOn: 'blur' }"
-                [placeholder]="!modoRegistro ? 'Dejar en blanco para no modificar' : ''" [required]="modoRegistro"
-                pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$" />
-              <div *ngIf="passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)"
-                class="text-danger small">
-                <div *ngIf="passwordModel.errors?.['required']">
-                  La contraseña es obligatoria
-                </div>
-                <div *ngIf="passwordModel.errors?.['minlength']">
-                  La contraseña debe tener al menos 6 caracteres
-                </div>
-                <div *ngIf="passwordModel.errors?.['pattern']">
-                  La contraseña debe contener al menos una mayúscula, un número y un carácter especial
-                </div>
-              </div>
+          <div class="d-flex justify-content-center align-items-center ">
+            <button class="btn btn-info me-2" type="submit"
+              [disabled]="form.invalid || !validarPassword() || usuarioSeleccionado.id === 1">{{ modoRegistro ? '💾
+              Registrar' : '💾 Guardar' }}</button>
+          </div>
 
-            </div>
-
-            <div class="mb-3" *ngIf="!modoRegistro">
-              <label class="form-label">Rol:</label>
-              <select class="form-select" [(ngModel)]="usuarioSeleccionado.rol" name="rol" required>
-                <option value="ADMIN">Administrador</option>
-                <option value="USER">Cliente</option>
-              </select>
-            </div>
-
-            <div class="d-flex justify-content-center align-items-center ">
-              <button class="btn btn-info me-2" type="submit"
-                [disabled]="form.invalid || !validarPassword() || usuarioSeleccionado.id === 1">{{ modoRegistro ? '💾
-                Registrar' : '💾 Guardar' }}</button>
-            </div>
-
-          </form>
-        </ng-container>
-      </div>
+        </form>
+      </ng-container>
     </div>
   </div>
+</div>
