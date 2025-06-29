@@ -14,8 +14,8 @@
         <!-- Correo -->
         <div class="mb-3">
           <label for="email"><strong>Email</strong></label>
-          <input type="email" id="email" name="email" class="form-control" autocomplete="off" [(ngModel)]="email" required
-            pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" #emailModel="ngModel" [ngClass]="{
+          <input type="email" id="email" name="email" class="form-control" autocomplete="off" [(ngModel)]="email"
+            required pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" #emailModel="ngModel" [ngClass]="{
           'is-invalid': emailModel.invalid && (emailModel.dirty || emailModel.touched),
           'is-valid': emailModel.valid && (emailModel.dirty || emailModel.touched)
         }" />

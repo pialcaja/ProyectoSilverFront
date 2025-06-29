@@ -15,7 +15,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 10px;
-background: linear-gradient(135deg, #1d0047, #28005c);
+  background: linear-gradient(135deg, #1d0047, #28005c);
 }
 
 .nav-logo {
@@ -174,7 +174,8 @@ background: linear-gradient(135deg, #1d0047, #28005c);
 .title {
   font-size: 2rem;
   font-weight: bold;
-  font-family: 'Orbitron', sans-serif; /* Usa una fuente tipo gaming si deseas */
+  font-family: 'Orbitron', sans-serif;
+  /* Usa una fuente tipo gaming si deseas */
 }
 
 .ver-todo {
@@ -196,8 +197,10 @@ background: linear-gradient(135deg, #1d0047, #28005c);
   display: flex;
   gap: 1rem;
   overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
 
 .cards::-webkit-scrollbar {

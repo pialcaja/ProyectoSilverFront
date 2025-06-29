@@ -4,15 +4,36 @@
 }
 
 .login-page {
+    position: relative;
     background-image: url('/img/login/login_fondo.jpeg');
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: auto;
     height: 100vh;
     width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+}
+
+.login-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.login-page>* {
+    position: relative;
+    z-index: 2;
 }
 
 .login-container {
@@ -25,7 +46,9 @@
     overflow: hidden;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     animation: fadeIn 0.5s ease-in-out;
+    z-index: 2;
 }
+
 
 .login-image {
     flex: 1;
