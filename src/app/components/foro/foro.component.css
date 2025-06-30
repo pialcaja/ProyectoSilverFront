@@ -1,0 +1,221 @@
+/* === NAVBAR === */
+.navbar-custom {
+    font-family: "Roboto", sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.259);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 50px;
+    margin-right: 12px;
+    filter: invert(1);
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.1) rotate(-3deg);
+}
+
+.brand-name {
+    font-family: "Keania One", sans-serif;
+    color: white;
+    font-size: 30px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.brand-name:hover {
+    color: #a18fff;
+    transform: scale(1.05);
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.contact-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    position: relative;
+    padding-bottom: 4px;
+    transition: color 0.3s ease;
+}
+
+.contact-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0%;
+    background: #a18fff;
+    transition: width 0.3s ease;
+}
+
+.contact-link:hover {
+    color: #a18fff;
+}
+
+.contact-link:hover::after {
+    width: 100%;
+}
+
+.icon-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
+}
+
+.icon-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    color: #a18fff;
+}
+
+/* === BODY === */
+body {
+    margin: 0;
+    background-color: #111;
+    background-image: url('/img/inicio/fondo2.png') !important;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+}
+
+/* === FORO === */
+main.foro {
+    padding: 120px 5% 60px;
+    width: 100%;
+}
+
+/* TITULOS */
+h2,
+h3,
+h4,
+h5 {
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+h2 {
+    font-family: "Keania One", sans-serif;
+
+    font-size: 3.2rem;
+    margin-bottom: 2rem;
+    color: #0b052d;
+}
+
+/* === TARJETAS === */
+.nuevo-tema,
+.tema,
+.respuestas {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: rgb(15, 9, 23);
+}
+
+/* === FORMULARIOS === */
+.nuevo-tema,
+.form-respuesta {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.nuevo-tema input,
+.nuevo-tema textarea,
+.form-respuesta input {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background-color: #1a1a1a;
+    color: #fff;
+    transition: border 0.3s ease;
+}
+
+.nuevo-tema input:focus,
+.nuevo-tema textarea:focus,
+.form-respuesta input:focus {
+    outline: none;
+    border: 1px solid #a18fff;
+}
+
+.nuevo-tema button,
+.form-respuesta button {
+    align-self: flex-end;
+    width: fit-content;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #a18fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.nuevo-tema button:hover,
+.form-respuesta button:hover {
+    background-color: #c2adff;
+}
+
+/* === DETALLE USUARIO === */
+.autor {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.autor i {
+    font-size: 1.5rem;
+    color: #a18fff;
+}
+
+/* === RESPUESTAS === */
+.respuesta {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+.fecha {
+    font-size: 0.75rem;
+    color: #bbb;
+    margin-top: 5px;
+    display: block;
+}

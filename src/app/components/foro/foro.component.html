@@ -1,0 +1,76 @@
+<!-- NAVBAR -->
+<header>
+    <nav class="navbar-custom">
+        <div class="navbar-left">
+            <img src="/img/logo.png" alt="Logo" class="logo" />
+            <span class="brand-name">SILVER</span>
+        </div>
+        <div class="navbar-right">
+            <a href="#juegos" class="contact-link">Videojuegos</a>
+            <a href="#footer" class="contact-link">Contáctanos</a>
+
+            <button class="icon-button login-btn" *ngIf="!loggedIn" (click)="irAlLogin()">
+                <i class="bi bi-person"></i>
+                <span class="login-text"> Iniciar sesión</span>
+            </button>
+
+            <button class="icon-button btn btn-danger" *ngIf="loggedIn" (click)="logout()">
+                <i class="bi bi-box-arrow-right"></i>
+                <span class="login-text"> Cerrar sesión</span>
+            </button>
+
+            <button class="icon-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#carritoSidebar"
+                aria-controls="carritoSidebar">
+                <i class="bi bi-cart"></i>
+            </button>
+        </div>
+    </nav>
+</header>
+
+<body>
+    <main class="foro">
+        <h2>Foro de Videojuegos</h2>
+
+        <!-- Botón para mostrar formulario -->
+        <div style="text-align: right; margin-bottom: 20px;">
+            <button class="icon-button" (click)="mostrarFormulario = !mostrarFormulario">
+                <i class="bi bi-plus-circle"></i> Nuevo Tema
+            </button>
+        </div>
+
+        <!-- Formulario -->
+        <div class="nuevo-tema" *ngIf="mostrarFormulario">
+            <h3>Crear nuevo tema</h3>
+            <input [(ngModel)]="nuevoTema.titulo" placeholder="Título del tema" />
+            <textarea [(ngModel)]="nuevoTema.contenido" placeholder="Contenido del tema" rows="5"></textarea>
+            <button (click)="crearTema()">Publicar</button>
+        </div>
+
+
+        <!-- Temas -->
+        <div *ngFor="let tema of temas" class="tema">
+            <div class="autor">
+                <i class="bi bi-person-circle"></i> {{ tema.autorUsername }}
+            </div>
+            <h4>{{ tema.titulo }}</h4>
+            <p>{{ tema.contenido }}</p>
+
+            <div class="respuestas">
+                <h5>Respuestas ({{ tema.respuestas.length }})</h5>
+
+                <div *ngFor="let resp of tema.respuestas" class="respuesta">
+                    <div class="autor">
+                        <i class="bi bi-person-circle"></i> {{ resp.autorUsername }}
+                    </div>
+                    <p>{{ resp.contenido }}</p>
+                    <span class="fecha">{{ resp.fecha | date: 'short' }}</span>
+                </div>
+
+                <div class="form-respuesta">
+                    <input [(ngModel)]="nuevasRespuestas[tema.id]" placeholder="Escribe una respuesta..." />
+                    <button (click)="responder(tema.id)">Responder</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
