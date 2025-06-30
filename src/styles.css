@@ -2,10 +2,14 @@
 .centrado-pagina {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* centra verticalmente */
-  align-items: center; /* centra horizontalmente */
-  height: 100vh; /* ocupa toda la altura de la ventana */
-  padding: 20px; /* espacio interno opcional */
+  justify-content: center;
+  /* centra verticalmente */
+  align-items: center;
+  /* centra horizontalmente */
+  height: 100vh;
+  /* ocupa toda la altura de la ventana */
+  padding: 20px;
+  /* espacio interno opcional */
   box-sizing: border-box;
   text-align: center;
 }

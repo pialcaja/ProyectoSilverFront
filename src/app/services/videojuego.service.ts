@@ -8,10 +8,10 @@ import { Observable } from 'rxjs';
 export class VideojuegoService {
   private readonly apiUrl = 'http://localhost:8091/api/videojuegos';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   listarVideojuegos(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/listado`);
+    return this.http.get(`${this.apiUrl}/lista`);
   }
 
   buscarVideojuegoPorNombre(nombre: string): Observable<any> {
@@ -29,20 +29,18 @@ export class VideojuegoService {
   }
 
   buscarVideojuegoPorId(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/listado/${id}`);
+    return this.http.get(`${this.apiUrl}/${id}`);
   }
 
   registrarVideojuego(videojuego: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/registro`, videojuego);
+    return this.http.post(`${this.apiUrl}`, videojuego);
   }
 
   actualizarVideojuego(id: number, videojuego: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/actualizacion/${id}`, videojuego);
+    return this.http.put(`${this.apiUrl}/${id}`, videojuego);
   }
 
   eliminarVideojuego(id: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/eliminar/${id}`, {});
   }
-
-
 }

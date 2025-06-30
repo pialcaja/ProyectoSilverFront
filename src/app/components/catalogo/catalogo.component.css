@@ -1,0 +1,458 @@
+/* Reset y tipografía base */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto", sans-serif;
+    color: #ffffff;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    overflow-x: hidden;
+}
+
+/* Página de catálogo */
+.catalog-page {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    padding: 100px 20px 40px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: url('/img/login/login_fondo.jpeg') center/cover no-repeat fixed;
+    image-rendering: auto;
+    font-family: "Roboto", sans-serif;
+    overflow: hidden;
+}
+
+.catalog-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.58);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.catalog-page>* {
+    position: relative;
+    z-index: 2;
+}
+
+h2.text-ligth {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+/* Contenedor de tarjetas */
+.catalogo-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 10px auto 0;
+}
+
+/* Tarjetas */
+.card {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 25px 20px;
+    color: #fff;
+    text-align: center;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card img {
+    width: 100%;
+    height: 290px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+/* Filtros */
+.list-group-item {
+    background: transparent;
+    border: none;
+    color: #fff;
+    position: relative;
+    padding-left: 35px;
+}
+
+.form-check-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.form-check-label {
+    margin-left: 8px;
+    font-size: 16px;
+    color: #cec4d0;
+    cursor: pointer;
+    position: relative;
+}
+
+.form-check-label::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid #999;
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+input[type="radio"]:checked+.form-check-label::before {
+    border-color: #9c9cff;
+    background-color: #9c9cff;
+    box-shadow: 0 0 0 2px rgba(156, 156, 255, 0.3);
+}
+
+input[type="radio"]:checked+.form-check-label {
+    color: #ffffff;
+}
+
+.d-flex>ul.list-group {
+    margin-right: 40px;
+}
+
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #ccc;
+    font-size: 22px;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+/* Navbar */
+/* Navbar */
+.navbar-custom {
+    font-family: "Roboto", sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.259);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 50px;
+    margin-right: 12px;
+    filter: invert(1);
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.1) rotate(-3deg);
+}
+
+.brand-name {
+    font-family: "Keania One", sans-serif;
+    color: white;
+    font-size: 30px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.brand-name:hover {
+    color: #a18fff;
+    transform: scale(1.05);
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.contact-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    position: relative;
+    padding-bottom: 4px;
+    transition: color 0.3s ease;
+}
+
+.contact-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0%;
+    background: #a18fff;
+    transition: width 0.3s ease;
+}
+
+.contact-link:hover {
+    color: #a18fff;
+}
+
+.contact-link:hover::after {
+    width: 100%;
+}
+
+.icon-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
+}
+
+.icon-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    color: #a18fff;
+}
+
+/* Contenedor general */
+.container.my-4 {
+    margin-top: 100px;
+    padding: 30px;
+}
+
+/* === Modal === */
+.modal-backdrop.show {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+}
+
+.modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0 auto;
+}
+
+.modal-content {
+    background: rgba(15, 12, 41, 0.85);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    animation: fadeInScale 0.3s ease-in-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    padding: 16px 24px;
+}
+
+.modal-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.btn-close {
+    filter: invert(1);
+    opacity: 0.7;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+/* Cuerpo del modal */
+.modal-body {
+    padding: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.modal-body img {
+    border-radius: 12px;
+    max-width: 300px;
+    height: 320px;
+    object-fit: cover;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.modal-body p {
+    font-size: 15px;
+    color: #dddddd;
+    margin-bottom: 10px;
+}
+
+.modal-body strong {
+    color: #9c9cff;
+    font-weight: 600;
+}
+
+/* Footer del modal */
+.modal-footer-custom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    padding-top: 20px;
+    margin-top: auto;
+}
+
+.cantidad-input {
+    max-width: 160px;
+}
+
+.input-group-text {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.form-control {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.form-control:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 0.2rem rgba(156, 156, 255, 0.3);
+}
+
+/* Botón de acción */
+.btn-success {
+    background: linear-gradient(135deg, #6c63ff, #473db9);
+    border: none;
+    font-weight: bold;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #5751d8, #2a265c);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .modal-body {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .modal-footer-custom {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .btn-success {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
+.carrito-sidebar {
+    background-color: #1a1a1a;
+    color: #fff;
+    width: 320px;
+}
+
+.item-carrito {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.info-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.imagen-item {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #3f3cbb, #000000);
+    border-radius: 6px;
+}
+
+.carrito-items {
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.carrito-total {
+    background-color: #1a1a1a;
+}
+
+.carrito-total p {
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+.btn-comprar {
+    width: 100%;
+    background: linear-gradient(135deg, #6c63ff, #473db9);
+    border: none;
+    padding: 10px;
+    color: white;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-comprar:hover {
+    background: linear-gradient(135deg, #5751d8, #2a265c);
+}

@@ -1,0 +1,138 @@
+<!-- NAVBAR -->
+<header>
+    <nav class="navbar-custom">
+        <div class="navbar-left">
+            <img src="img/logo.png" alt="Logo" class="logo" />
+            <span class="brand-name">SILVER</span>
+        </div>
+        <div class="navbar-right">
+            <a href="#juegos" class="contact-link">Videojuegos</a>
+            <a href="#footer" class="contact-link">Contáctanos</a>
+
+            <button class="icon-button login-btn" *ngIf="!loggedIn" (click)="irAlLogin()">
+                <i class="bi bi-person"></i>
+                <span class="login-text"> Iniciar sesión</span>
+            </button>
+
+            <button class="icon-button login-btn btn btn-danger" *ngIf="loggedIn" (click)="logout()">
+                <i class="bi bi-box-arrow-right"></i>
+                <span class="login-text"> Cerrar sesión</span>
+            </button>
+
+            <button class="icon-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#carritoSidebar"
+                aria-controls="carritoSidebar">
+                <i class="bi bi-cart"></i>
+            </button>
+        </div>
+    </nav>
+</header>
+
+<div class="catalog-page">
+    <div class="container my-4">
+        <h3 class="mb-4 text-light">Categorías</h3>
+        <div class="d-flex justify-content-between align-items-start">
+            <ul class="list-group me-4" style="width: 250px;">
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="radio" name="listGroupRadio" id="cat0" [value]="0"
+                        [(ngModel)]="categoriaSeleccionada" (change)="filtrarPorCategoria()" />
+                    <label class="form-check-label" for="cat0">Todas las categorías</label>
+                </li>
+                <li class="list-group-item" *ngFor="let cat of categorias">
+                    <input class="form-check-input me-1" type="radio" name="listGroupRadio" [id]="'cat' + cat.id"
+                        [value]="cat.id" [(ngModel)]="categoriaSeleccionada" (change)="filtrarPorCategoria()" />
+                    <label class="form-check-label" [for]="'cat' + cat.id">{{ cat.nombre }}</label>
+                </li>
+            </ul>
+
+            <div class="catalogo-container">
+                <ng-container *ngIf="videojuegos.length > 0; else sinResultados">
+                    <div *ngFor="let vj of videojuegos" class="card" (click)="abrirModal(vj.id)">
+                        <img [src]="getRutaImagen(vj.id)" alt="Portada de {{ vj.titulo }}"
+                            (error)="onImageError($event)" />
+                        <h3>{{ vj.titulo }}</h3>
+                        <p>S/ {{ vj.precio }}</p>
+                    </div>
+                </ng-container>
+
+                <ng-template #sinResultados>
+                    <div class="no-results">
+                        <h3>No hay videojuegos en esta categoría.</h3>
+                        <p>Intenta seleccionar otra opción del menú de la izquierda.</p>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Detalle Videojuego -->
+<div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" *ngIf="videojuegoSeleccionado">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detalleModalLabel">{{ videojuegoSeleccionado.titulo }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body d-flex flex-wrap gap-4">
+                <img [src]="getRutaImagen(videojuegoSeleccionado.id)" class="img-fluid rounded" />
+
+                <div class="flex-grow-1 d-flex flex-column justify-content-between">
+                    <div>
+                        <p><strong>Descripción:</strong> {{ videojuegoSeleccionado.descripcion }}</p>
+                        <p><strong>Categoría:</strong> {{ videojuegoSeleccionado.categoria.nombre }}</p>
+                        <p><strong>Precio:</strong> S/ {{ videojuegoSeleccionado.precio }}</p>
+                    </div>
+
+                    <div class="w-100 mt-4" *ngIf="modalAbierto">
+                        <div class="ratio ratio-16x9">
+                            <iframe width="100%" height="250" loading="lazy"
+                                [src]="getTrailerEmbedUrl(videojuegoSeleccionado.titulo) | safe" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer-custom mt-3">
+                        <div class="input-group cantidad-input">
+                            <span class="input-group-text">Cantidad</span>
+                            <input type="number" class="form-control" min="1" [max]="videojuegoSeleccionado.stock">
+                        </div>
+                        <button class="btn btn-success ms-3">Añadir al carrito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="offcanvas offcanvas-end carrito-sidebar" tabindex="-1" id="carritoSidebar"
+    aria-labelledby="carritoSidebarLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="carritoSidebarLabel">Carrito de Compras</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <hr>
+
+    <!-- Contenedor scrollable -->
+    <div class="offcanvas-body d-flex flex-column p-0 h-100">
+        <div class="carrito-items px-3 py-2 flex-grow-1 overflow-auto">
+            <div class="item-carrito">
+                <div class="info-item">
+                    <p>Nombre<br>Precio<br>Cantidad</p>
+                </div>
+                <div class="imagen-item"></div>
+            </div>
+
+        </div>
+
+        <!-- Fijo en la parte inferior -->
+        <div class="carrito-total px-3 py-3 ">
+            <p class="mb-2">Total: <strong></strong></p>
+            <hr>
+            <button class="btn-comprar">Comprar</button>
+        </div>
+    </div>
+</div>

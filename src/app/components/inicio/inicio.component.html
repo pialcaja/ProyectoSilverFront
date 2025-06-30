@@ -1,31 +1,41 @@
-<div class="silver-container">
-
-  <!-- Navbar -->
-  <nav class="siluar-nav">
-    <div class="nav-logo">
-      <img src="img/logo.png" alt="Silver Logo" class="logo-img" />
-      <span>SILVER</span>
+<!-- NAVBAR -->
+<header>
+  <nav class="navbar-custom">
+    <div class="navbar-left">
+      <img src="img/logo.png" alt="Logo" class="logo" />
+      <span class="brand-name">SILVER</span>
     </div>
+    <div class="navbar-right">
+      <a href="#juegos" class="contact-link">Videojuegos</a>
+      <a href="#footer" class="contact-link">Contáctanos</a>
 
-    <div class="nav-links">
-      <a href="#" class="nav-link">Productos</a>
-      <a href="#" class="nav-link">Contacto</a>
-
-      <!-- Botón de sesión dinámico -->
-      <button class="login-btn" *ngIf="!loggedIn" (click)="irAlLogin()">
-        Iniciar sesión
+      <button class="icon-button login-btn" *ngIf="!loggedIn" (click)="irAlLogin()">
+        <i class="bi bi-person"></i>
+        <span class="login-text"> Iniciar sesión</span>
       </button>
 
-      <button class="login-btn btn btn-danger" *ngIf="loggedIn" (click)="logout()">
-        Cerrar sesión
+      <button class="icon-button login-btn btn btn-danger" *ngIf="loggedIn" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i>
+        <span class="login-text"> Cerrar sesión</span>
+      </button>
+
+      <button class="icon-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#carritoSidebar"
+        aria-controls="carritoSidebar">
+        <i class="bi bi-cart"></i>
       </button>
     </div>
   </nav>
+</header>
 
-  <!-- Contenido principal -->
+<!-- CONTENEDOR PRINCIPAL -->
+<main class="silver-container">
+
+  <!-- SECCIÓN: BANNER PRINCIPAL -->
   <section class="home-banner">
-    <!-- Parte superior: mensaje e imagen -->
-    <div class="top-section">
+    <!-- Personaje flotante arriba de todo -->
+
+    <!-- Contenido principal -->
+    <div class="content-container">
       <div class="info-box">
         <p class="description">
           Compra videojuegos, descubre joyas ocultas y únete a miles de jugadores en nuestro foro para debatir,
@@ -33,103 +43,127 @@
         </p>
         <p class="tags">Juegos top • Comunidad activa • Todo en un solo lugar</p>
       </div>
-      <img src="img/inicio/personaje.png" alt="Personaje" class="character-img" />
     </div>
 
-    <!-- Parte inferior: comunidad/chat -->
-    <div class="bottom-section">
-      <div class="images-column">
-        <img src="img/login/login_imagen_izq.jpg" alt="Juego 1" />
-        <img src="img/inicio/nahida.jpg" alt="Juego 2" />
-        <img src="img/inicio/kirby.jpg" alt="Juego 3" />
+    <img src="img/inicio/personaje.png" alt="Sombra del personaje" class="character-shadow" />
+
+  </section>
+
+
+
+  <img src="img/inicio/personaje.png" alt="Personaje" class="character-img" />
+
+
+
+  <!-- SECCIÓN DE CHAT -->
+  <section class="chat-section">
+    <div class="chat-container">
+
+      <!-- Columna de imágenes -->
+      <div class="chat-images">
+        <div class="image-column">
+          <img src="img/inicio/kirby.jpg" alt="Kirby">
+          <img src="img/login/login_imagen_izq.jpg" alt="Mudkip">
+        </div>
+        <div class="image-center">
+          <img src="img/inicio/nahida.jpg" alt="Nahida">
+        </div>
       </div>
 
+      <!-- Contenido del chat -->
       <div class="chat-content">
+        <div class="chat-icon">
+          💬
+        </div>
+
         <div class="chat-bubble">
-          <span class="chat-icon">💬</span>
-          <p>
-            ¿Tienes preguntas? Nuestro bot te responde al instante sobre compras, juegos y cómo moverte por el sitio.
+          <p>¿Tienes preguntas? Nuestro bot te responde al instante sobre compras, juegos y cómo moverte por el sitio.
           </p>
         </div>
 
-        <div class="chat-bubble dark">
-          <p>
-            Conecta con jugadores como tú, crea equipos, comparte tips o simplemente charla sobre tus juegos favoritos.
+        <div class="chat-bubble alt">
+          <p>Conecta con jugadores como tú, crea equipos, comparte tips o simplemente charla sobre tus juegos favoritos.
           </p>
         </div>
 
-        <h3 class="cta-text">¡Conversa, juega y recibe ayuda sin salir de Silver!</h3>
+        <h3 class="chat-title">¡Conversa, juega y recibe ayuda sin salir de Silver!</h3>
       </div>
     </div>
   </section>
 
-  <!-- Carrusel -->
-  <div class="juegos-container">
+
+  <!-- SECCIÓN: CARRUSEL DE JUEGOS -->
+  <section id="juegos" class="juegos-container">
     <div class="header">
       <h2 class="title">Juegos</h2>
-      <button class="ver-todo">Ver todo</button>
+      <button class="ver-todo" (click)="irACatalogo()">Ver todo</button>
+
     </div>
 
-    <div class="carousel">
-      <button class="arrow left">&#10094;</button>
+    <div class="carousel-wrapper">
+      <button class="arrow left" (click)="moverIzquierda()">&#10094;</button>
 
-      <div class="cards">
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-      </div>
-
-      <button class="arrow right">&#10095;</button>
-    </div>
-  </div>
-
-  <!--Contenido del footer-->
-  <footer class="footer">
-    <div class="footer-content">
-      <!-- Logo y nombre -->
-      <div class="footer-logo">
-        <img src="/img/logo.png" alt="Logo Silver" class="logo" />
-        <h2>Silver</h2>
-      </div>
-
-      <!-- Acerca de -->
-      <div class="footer-section">
-        <h3>Acerca de Silver</h3>
-        <p>
-          Silver es una plataforma creada por y para gamers. Aquí no solo compras tus juegos favoritos, también conectas
-          con otros jugadores, compartes experiencias y formas parte de una comunidad activa.
-        </p>
-      </div>
-
-      <!-- Políticas -->
-      <div class="footer-section">
-        <h3>Política</h3>
-        <ul>
-          <li><a href="#">Términos y condiciones</a></li>
-          <li><a href="#">Política de reembolso</a></li>
-          <li><a href="#">Política de privacidad</a></li>
-          <li><a href="#">Política de cookies</a></li>
-        </ul>
-      </div>
-
-      <!-- Comunidad -->
-      <div class="footer-section">
-        <h3>Únete a la comunidad</h3>
-        <div class="social-icons">
-          <a href="#"><img src="" alt="Discord" /></a>
-          <a href="#"><img src="" alt="Facebook" /></a>
-          <a href="#"><img src="" alt="Instagram" /></a>
+      <div class="carousel">
+        <div class="card" *ngFor="let i of imagenesMostradas">
+          <img [src]="'assets/videojuegos/' + i + '.jpg'" [alt]="'Juego ' + i" />
         </div>
       </div>
+
+      <button class="arrow right" (click)="moverDerecha()">&#10095;</button>
+    </div>
+  </section>
+
+
+
+
+</main>
+
+<!-- PIE DE PÁGINA -->
+<footer class="footer" id="footer">
+  <div class="footer-content">
+
+    <!-- Logo y Nombre -->
+    <div class="footer-logo1">
+      <img src="/img/logo.png" alt="Logo Silver" class="logo1" />
+      <h2>Silver</h2>
     </div>
 
-    <!-- Mensaje final -->
-    <div class="footer-bottom">
+    <!-- Acerca de Silver -->
+    <div class="footer-section">
+      <h3>Acerca de Silver</h3>
       <p>
-        En Silver, el juego no termina cuando apagas la consola. Aquí compras, chateas con otros gamers, resuelves dudas
-        con nuestro bot y formas parte de una comunidad activa. Todo en un solo lugar, hecho para ti.
+        Silver es una plataforma creada por y para gamers. Aquí no solo compras tus juegos favoritos,
+        también conectas con otros jugadores, compartes experiencias y formas parte de una comunidad activa.
       </p>
     </div>
-  </footer>
-</div>
+
+    <!-- Políticas -->
+    <div class="footer-section">
+      <h3>Política</h3>
+      <ul>
+        <li><a href="#">Términos y condiciones</a></li>
+        <li><a href="#">Política de reembolso</a></li>
+        <li><a href="#">Política de privacidad</a></li>
+        <li><a href="#">Política de cookies</a></li>
+      </ul>
+    </div>
+
+    <!-- Comunidad -->
+    <div class="footer-section">
+      <h3>Únete a la comunidad</h3>
+      <div class="social-icons">
+        <a href="#"><i class="bi bi-discord"></i></a>
+        <a href="#"><i class="bi bi-facebook"></i></a>
+        <a href="#"><i class="bi bi-instagram"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>
+      En Silver, el juego no termina cuando apagas la consola. Aquí compras, chateas con otros gamers,
+      resuelves dudas con nuestro bot y formas parte de una comunidad activa. Todo en un solo lugar, hecho para ti.
+    </p>
+  </div>
+</footer>
