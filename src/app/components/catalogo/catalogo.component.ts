@@ -49,6 +49,9 @@ export class CatalogoComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.authService.loggedIn$.subscribe(status => {
+            this.loggedIn = status;
+        });
         this.cargarCategorias();
         this.cargarVideojuegos();
     }

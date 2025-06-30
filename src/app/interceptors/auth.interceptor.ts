@@ -30,13 +30,11 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
               });
               return next(retryReq);
             } else {
-              console.error('No se recibió token al refrescar');
               authService.logout();
               return throwError(() => new Error('No se pudo refrescar el token'));
             }
           }),
           catchError((refreshError) => {
-            console.error('Error al intentar refrescar token', refreshError);
             authService.logout();
             return throwError(() => refreshError);
           })
