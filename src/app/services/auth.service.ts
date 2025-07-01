@@ -58,19 +58,15 @@ export class AuthService {
 
   getNombreUsuario(): string | null {
     const token = this.getAccessToken();
-    console.log('SE HA CAPTURADO EL TOKEN: ' + token);
 
     if (!token) {
-      console.log('TOKEN CAPTURADO ES NULL');
       return null;
     }
 
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      console.log('NOMBRE EN EL TOKEN: ' + payload.nombre);
       return payload.nombre || null;
     } catch (e) {
-      console.log('ERROR AL DECODIFICAR EL TOKEN', e);
       return null;
     }
   }

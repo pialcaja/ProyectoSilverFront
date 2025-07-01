@@ -9,6 +9,7 @@ import { CatalogoComponent } from './components/catalogo/catalogo.component';
 import { ForoComponent } from './components/foro/foro.component';
 
 
+
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },

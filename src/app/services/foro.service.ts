@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Tema, Respuesta } from '../models/tema.model';
 import { Observable } from 'rxjs';
 
+/*foro*/
 @Injectable({ providedIn: 'root' })
 export class ForoService {
   private baseUrl = 'http://localhost:8091/api/foro';

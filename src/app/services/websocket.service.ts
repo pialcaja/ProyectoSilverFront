@@ -23,6 +23,7 @@ export class WebSocketService {
       const respuesta = JSON.parse(mensaje.body);
       callback(respuesta);
     });
+
   }
 
   desconectar(): void {

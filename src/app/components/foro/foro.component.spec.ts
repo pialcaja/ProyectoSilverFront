@@ -10,7 +10,7 @@ describe('ForoComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ForoComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ForoComponent);
     component = fixture.componentInstance;
@@ -21,3 +21,4 @@ describe('ForoComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+

@@ -44,10 +44,28 @@ export class DashboardComponent implements OnInit {
   }
 
   usuarios: any[] = [];
-
+  totalPaginas: number = 0;
+  paginaActual: number = 0;
+  tamanoPagina: number = 5;
+  modalAbierto = false;
+  usuarioSeleccionado: any = null;
+  nuevaPassword: string = '';
+  modoRegistro: boolean = false;
+  textoBusqueda: string = '';
+  totalUsuarios: number = 0;
+  estadoSeleccionado: 'ACTIVO' | 'INACTIVO' | null = null;
+  rolSeleccionado: string | null = null;
+  mensajeBackend: string | null = null;
+  passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+  nombreUsuario: string | null = null;
 
   ngOnInit(): void {
+    this.nombreUsuario = this.authService.getNombreUsuario();
 
+    if (this.seccion === 'usuarios') {
+      this.estadoSeleccionado = 'ACTIVO';
+      this.cargarUsuarios();
+    }
     this.seccion = 'usuarios';
   }
 
@@ -74,45 +92,57 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-
-  estadoSeleccionado: 'ACTIVO' | 'INACTIVO' | null = null;
-  rolSeleccionado: string | null = null;
-  mensajeBackend: string | null = null;
-
   cargarUsuarios() {
     if (!this.estadoSeleccionado) {
       return;
     }
     this.usuarioService
-      .listarUsuarios(this.estadoSeleccionado, this.rolSeleccionado ?? undefined)
+      .listarUsuarios(
+        this.estadoSeleccionado,
+        this.rolSeleccionado ?? undefined,
+        this.paginaActual,
+        this.tamanoPagina,
+        this.textoBusqueda.trim())
       .subscribe({
         next: (res) => {
-          this.usuarios = res.usuarios || [];
+          this.usuarios = res.usuarios || res.content || [];
+          this.totalPaginas = res.totalPages || 1;
+          this.totalUsuarios = res.totalItems || this.usuarios.length;
         },
         error: (err) => {
           this.usuarios = [];
+          this.totalPaginas = 0;
+          this.totalUsuarios = 0;
           this.alertaService.mostrarMensaje('error', '¡Error!', err.error?.mensaje || 'Error al obtener usuarios');
-          console.error('Error al cargar usuarios', err);
         },
       });
+  }
+
+  onBuscarCambio() {
+    this.paginaActual = 0;
+    this.cargarUsuarios();
   }
 
   cambiarEstado(estado: string) {
     if (estado !== 'ACTIVO' && estado !== 'INACTIVO') return;
     this.estadoSeleccionado = estado;
+    this.paginaActual = 0;
     this.cambiarRol(null);
     this.cargarUsuarios();
   }
 
   cambiarRol(rol: string | null) {
     this.rolSeleccionado = rol;
+    this.paginaActual = 0;
     this.cargarUsuarios();
   }
 
-  modalAbierto = false;
-  usuarioSeleccionado: any = null;
-  nuevaPassword: string = '';
-  modoRegistro: boolean = false;
+  irAPagina(pagina: number) {
+    if (pagina >= 0 && pagina < this.totalPaginas) {
+      this.paginaActual = pagina;
+      this.cargarUsuarios();
+    }
+  }
 
   registrarUsuario() {
     this.usuarioSeleccionado = {
@@ -233,10 +263,8 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
-
   validarPassword() {
-    if (!this.nuevaPassword) return true; // opcional, sin validar si está vacío
+    if (!this.nuevaPassword) return true;
 
     if (this.nuevaPassword.length < 6) return false;
     if (!this.passwordPattern.test(this.nuevaPassword)) return false;

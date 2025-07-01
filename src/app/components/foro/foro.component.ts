@@ -7,6 +7,7 @@ import { Tema, Respuesta } from '../../models/tema.model';
 
 
 
+
 @Component({
   selector: 'app-foro',
   standalone: true,

@@ -1,4 +1,6 @@
-<h2 class="text-center my-4">Panel de Administrador</h2>
+<h2 class="text-center my-4" *ngIf="nombreUsuario">
+  Hola {{ nombreUsuario || 'Usuario' }}!👋 Bienvenido(a) al panel de administrador ✍️🥸
+</h2>
 
 <div class="d-flex bg-dark">
   <div class="p-4 border-end d-flex flex-column" style="max-width: 200px; height: 100vh; color: white;">
@@ -35,6 +37,12 @@
       <div class="d-flex align-items-center flex-wrap gap-4 mb-3">
 
         <div>
+          <strong>Buscar: </strong>
+          <input type="text" [(ngModel)]="textoBusqueda" (ngModelChange)="onBuscarCambio()"
+            class="form-control form-control-sm d-inline-block" placeholder="Nombre o Email" style="width: 200px;" />
+        </div>
+
+        <div>
           <strong>Estado: </strong>
           <button class="btn btn-outline-light btn-sm"
             [ngClass]="estadoSeleccionado === 'ACTIVO' ? 'btn-light text-dark' : 'btn-outline-light'"
@@ -61,24 +69,24 @@
         </div>
 
         <!-- Tabla de usuarios -->
-        <div class="table">
-          <table *ngIf="usuarios.length > 0" class="table table-hover table-light table-bordered">
-            <thead>
+        <div class="table rounded-3 overflow-hidden mb-0">
+          <table *ngIf="usuarios.length > 0" class="table table-hover table-bordered m-0">
+            <thead style="--bs-table-bg: #0dcaf0;">
               <tr>
-                <th scope="col">#</th>
+                <th scope="col" class="text-center">#</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Email</th>
                 <th scope="col">Rol</th>
-                <th scope="col">Acciones</th>
+                <th scope="col" class="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let u of usuarios; let i = index">
-                <td>{{ i + 1 }}</td>
+              <tr *ngFor="let u of usuarios; let i = index" class="align-middle">
+                <td class="text-center">{{ i + 1 + paginaActual * tamanoPagina }}</td>
                 <td>{{ u.nombre }}</td>
                 <td>{{ u.email }}</td>
                 <td>{{ u.rol === 'ADMIN' ? 'Administrador' : u.rol === 'USER' ? 'Cliente' : u.rol }}</td>
-                <td>
+                <td class="text-center">
                   <ng-container *ngIf="u.id !== 1">
                     <button class="btn btn-sm btn-outline-dark" style="font-size: 12pt;" (click)="actualizarUsuario(u)"
                       title="Editar usuario">✏️</button> |
@@ -92,6 +100,26 @@
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="d-flex justify-content-between align-items-center w-100">
+          <!-- Total de usuarios encontrados -->
+          <div class="text-white">
+            <strong><em>Usuarios encontrados: {{ totalUsuarios }}</em></strong>
+          </div>
+
+          <!-- Navegación -->
+          <nav aria-label="Paginación de usuarios">
+            <ul class="pagination my-0">
+              <li class="page-item" [class.disabled]="paginaActual === 0">
+                <button class="page-link" style="font-size: 16pt;" (click)="irAPagina(paginaActual - 1)"
+                  [disabled]="paginaActual === 0" title="Anterior página">⬅️</button>
+              </li>
+              <li class="page-item" [class.disabled]="paginaActual >= totalPaginas - 1">
+                <button class="page-link" style="font-size: 16pt;" (click)="irAPagina(paginaActual + 1)"
+                  [disabled]="paginaActual >= totalPaginas - 1" title="Siguiente página">➡️</button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
